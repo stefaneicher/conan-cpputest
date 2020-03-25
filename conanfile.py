@@ -27,8 +27,8 @@ class CppUTest(ConanFile):
         "shared=False",
         "fPIC=False",
         "verbose=False",
-        "use_std_c_lib=ON",
-        "use_std_cpp_lib=ON",
+        "use_std_c_lib=OFF",
+        "use_std_cpp_lib=OFF",
         "use_cpp11=ON",
         "detect_mem_leaks=ON",
         "extensions=ON",
@@ -57,13 +57,11 @@ class CppUTest(ConanFile):
         cmake.definitions["LONGLONG"] = self.options.longlong
         cmake.definitions["COVERAGE"] = self.options.coverage
         cmake.definitions["TESTS"] = self.options.tests
+        cmake.definitions["CMAKE_TRY_COMPILE_TARGET_TYPE"] = "STATIC_LIBRARY"
         #self.output.info("definitions={}".format(cmake.definitions))
         cmake.configure(source_dir=os.path.join(self.source_folder, self.source_dir))
         return cmake
 
-    def source(self):
-        # No need to do anything here, since our scm definition does the work
-        pass
 
     def build(self):
         cmake = self._my_cmake()
