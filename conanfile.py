@@ -62,6 +62,9 @@ class CppUTest(ConanFile):
         cmake.configure(source_dir=os.path.join(self.source_folder, self.source_dir))
         return cmake
 
+    def source(self):
+        # No need to do anything here, since our scm definition does the work
+        pass
 
     def build(self):
         cmake = self._my_cmake()
