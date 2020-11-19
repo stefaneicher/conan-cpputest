@@ -1,5 +1,5 @@
 import os
-from conans import ConanFile, CMake
+from conans import ConanFile, CMake, tools
 
 
 class CppUTest(ConanFile):
@@ -30,21 +30,12 @@ class CppUTest(ConanFile):
         "use_std_c_lib=ON",
         "use_std_cpp_lib=ON",
         "use_cpp11=ON",
-        "detect_mem_leaks=ON",
+        "detect_mem_leaks=OFF",
         "extensions=ON",
         "longlong=ON",
         "coverage=OFF",
         "tests=ON"
     )
-    scm = {
-        "type": "git",
-        "subfolder": source_dir,
-        "url": "https://github.com/cpputest/cpputest.git",
-        "revision": "tags/v{version}".format(version=version)
-    }
-    if version == "master":
-        scm["revision"] = "master"
-
     def _my_cmake(self):
         cmake = CMake(self, set_cmake_flags=True)
         cmake.verbose = self.options.verbose
@@ -57,13 +48,16 @@ class CppUTest(ConanFile):
         cmake.definitions["LONGLONG"] = self.options.longlong
         cmake.definitions["COVERAGE"] = self.options.coverage
         cmake.definitions["TESTS"] = self.options.tests
+        cmake.definitions["CPP_PLATFORM"] = "armcc"
+        #cmake.definitions["CPPUTEST_STD_CPP_LIB_DISABLED"] = "ON"
+        #cmake.definitions["CPPUTEST_MEM_LEAK_DETECTION_DISABLED"] = "ON"
         #self.output.info("definitions={}".format(cmake.definitions))
         cmake.configure(source_dir=os.path.join(self.source_folder, self.source_dir))
         return cmake
 
     def source(self):
-        # No need to do anything here, since our scm definition does the work
-        pass
+        os.system(f"git clone -b feature/cpputest-onhw /workspace/cpputest/cpputest {self.source_dir}")
+        # os.system(f"git clone /workspace/cpputest/cpputest {self.source_dir}")
 
     def build(self):
         cmake = self._my_cmake()
