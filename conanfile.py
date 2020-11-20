@@ -27,12 +27,12 @@ class CppUTest(ConanFile):
         "shared=False",
         "fPIC=False",
         "verbose=False",
-        "use_std_c_lib=ON",
-        "use_std_cpp_lib=ON",
+        "use_std_c_lib=OFF",
+        "use_std_cpp_lib=OFF",
         "use_cpp11=ON",
         "detect_mem_leaks=OFF",
-        "extensions=ON",
-        "longlong=ON",
+        "extensions=OFF",
+        "longlong=OFF",
         "coverage=OFF",
         "tests=ON"
     )
